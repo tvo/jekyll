@@ -15,7 +15,8 @@ module Jekyll
 
       def to_liquid
         @to_liquid ||= begin
-          `git log '--pretty=format:%H\1%aN\1%ar\1%s' -- #{@path}`.split("\n").map do |line|
+          return unless @path =~ /^[-_0-9a-z.\/]+$/i   # Protect against shell command injection
+          `git log '--pretty=format:%H\1%aN\1%ar\1%s' -- '#{@path}'`.split("\n").map do |line|
             hash, author, date, subject = line.split("\1")
             {"hash" => hash, "author" => author, "date" => date, "subject" => subject}
           end
