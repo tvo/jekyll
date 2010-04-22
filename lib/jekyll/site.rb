@@ -234,7 +234,7 @@ module Jekyll
           "posts"      => self.posts.sort { |a,b| b <=> a },
           "categories" => post_attr_hash('categories'),
           "tags"       => post_attr_hash('tags'),
-	      "git"        => Git.new('') })}
+          "git"        => Git.new('') })}
     end
 
     # Filter out any files/directories that are hidden or backup files (start
