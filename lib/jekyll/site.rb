@@ -180,7 +180,7 @@ module Jekyll
       end
     end
 
-    # Reads the directories and finds posts, pages and static files that will 
+    # Reads the directories and finds posts, pages and static files that will
     # become part of the valid site according to the rules in +filter_entries+.
     #   The +dir+ String is a relative path used to call this method
     #            recursively as it descends through directories
@@ -233,8 +233,19 @@ module Jekyll
           "time"       => Time.now,
           "posts"      => self.posts.sort { |a,b| b <=> a },
           "categories" => post_attr_hash('categories'),
-          "tags"       => post_attr_hash('tags')})}
+          "tags"       => post_attr_hash('tags'),
+	      "git"        => {
+	        "describe" => `git describe --always`,
+	        "log"      => self.parse_git_log
+	      }})}
     end
+
+    def parse_git_log
+      `git log '--pretty=format:%H\1%aN\1%ar\1%s'`.split("\n").map do |line|
+        hash, author, date, subject = line.split("\1")
+        {"hash" => hash, "author" => author, "date" => date, "subject" => subject}
+	  end
+	end
 
     # Filter out any files/directories that are hidden or backup files (start
     # with "." or "#" or end with "~"), or contain site content (start with "_"),
