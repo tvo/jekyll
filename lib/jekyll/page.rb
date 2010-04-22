@@ -75,7 +75,11 @@ module Jekyll
     #
     # Returns nothing
     def render(layouts, site_payload)
-      payload = {"page" => self.data}.deep_merge(site_payload)
+      payload = {
+        "page" => {
+          "git"  => Git.new(File.join(@base, @dir, @name))
+        }.deep_merge(self.data)
+      }.deep_merge(site_payload)
       do_layout(payload, layouts)
     end
 

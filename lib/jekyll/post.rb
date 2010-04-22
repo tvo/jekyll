@@ -209,7 +209,9 @@ module Jekyll
         "next"       => self.next,
         "previous"   => self.previous,
         "tags"       => self.tags,
-        "content"    => self.content }.deep_merge(self.data)
+        "content"    => self.content,
+        "git"        => Git.new(File.join(@base, @name))
+      }.deep_merge(self.data)
     end
 
     def inspect

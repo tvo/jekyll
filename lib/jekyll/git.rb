@@ -9,9 +9,13 @@ module Jekyll
     end
 
     class Log
+      def initialize(path)
+        @path = path
+      end
+
       def to_liquid
         @to_liquid ||= begin
-          `git log '--pretty=format:%H\1%aN\1%ar\1%s'`.split("\n").map do |line|
+          `git log '--pretty=format:%H\1%aN\1%ar\1%s' -- #{@path}`.split("\n").map do |line|
             hash, author, date, subject = line.split("\1")
             {"hash" => hash, "author" => author, "date" => date, "subject" => subject}
           end
@@ -19,8 +23,12 @@ module Jekyll
       end
     end
 
+    def initialize(path)
+      @path = path
+    end
+
     def to_liquid
-      @to_liquid ||= {"describe" => Describe.new, "log" => Log.new}
+      @to_liquid ||= {"describe" => Describe.new, "log" => Log.new(@path)}
     end
 
   end
