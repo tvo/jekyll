@@ -234,18 +234,8 @@ module Jekyll
           "posts"      => self.posts.sort { |a,b| b <=> a },
           "categories" => post_attr_hash('categories'),
           "tags"       => post_attr_hash('tags'),
-	      "git"        => {
-	        "describe" => `git describe --always`,
-	        "log"      => self.parse_git_log
-	      }})}
+	      "git"        => Git.new })}
     end
-
-    def parse_git_log
-      `git log '--pretty=format:%H\1%aN\1%ar\1%s'`.split("\n").map do |line|
-        hash, author, date, subject = line.split("\1")
-        {"hash" => hash, "author" => author, "date" => date, "subject" => subject}
-	  end
-	end
 
     # Filter out any files/directories that are hidden or backup files (start
     # with "." or "#" or end with "~"), or contain site content (start with "_"),
